@@ -46,6 +46,23 @@ exports.getNewAppointment = async (req, res, next) => {
     })
 }
 
+exports.getUserAppointments = async (req, res, next) => {
+    const {userId} = req.session
+    let appointments = await Appointment.getUserAppointments(userId)
+    appointments = JSON.parse(appointments)
+    const appointmentsTranslatedDay = appointments.map( app => {
+        return {
+            day: dayConstants.dayTranslation[app.day],
+            hour: app.hour
+        }
+    })
+    res.render('appointment/userAppointment', {
+        pageTitle: 'Horario',
+        html: html,
+        appointmentsTranslatedDay
+    })
+}
+
 exports.createNewAppointment = async (req, res, next) => {
     let {schedule, day} = req.body;
     schedule = parseInt(schedule);
