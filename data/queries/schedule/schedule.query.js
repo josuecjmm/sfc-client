@@ -20,10 +20,18 @@ exports.selectSingle = () => {
     `
 }
 
-exports.update = () => {
+exports.updateReduceTotal = () => {
     return `
         UPDATE DaySchedule
         set total = total - 1
+        WHERE id = ?
+    `
+}
+
+exports.updateAddTotal = () => {
+    return `
+        UPDATE DaySchedule
+        set total = total + 1
         WHERE id = ?
     `
 }

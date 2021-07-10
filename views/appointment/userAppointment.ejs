@@ -3,6 +3,9 @@
 <%- include('../includes/navigation.ejs', {html:html}, {html:html}) %>
 
 <div class="row">
+    <a href="/"><- Volver al inicio</a>
+    &nbsp;&nbsp;&nbsp;
+    <% if (appointmentsTranslatedDay.length > 0 ){ %>
     <h1>Mi Horario</h1>
     <div class="container">
         <div class="row">
@@ -16,18 +19,29 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <%appointmentsTranslatedDay.forEach(app => {%>
+                        <% appointmentsTranslatedDay.forEach(app => { %>
                         <tr class="table-primary">
-                            <td><%=app.day%></td>
-                            <td><%=app.hour%></td>
-                            <td><button class="btn btn-danger">Borrar</button></td>
+                            <td><%= app.day %></td>
+                            <td><%= app.hour %></td>
+                            <td>
+                                <form method="post" action="/appointment/delete">
+                                    <input type="hidden" name="id" value="<%= app.id %>"/>
+                                    <input type="hidden" name="dayScheduleId" value="<%= app.dayScheduleId %>"/>
+                                    <button class="btn btn-danger">Borrar</button>
+                                </form>
+
+                            </td>
                         </tr>
-                    <%})%>
+                        <% }) %>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+        <% } else {%>
+            <h1> No hay Citas para este usuario</h1>
+            <span>Puede seleccionar una cita en el Inicio</span>
+        <% }%>
 </div>
 
 <%- include('../includes/end.ejs') %>
