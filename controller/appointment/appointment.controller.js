@@ -4,6 +4,21 @@ const User = require('../../models/user.model')
 const Schedule = require('../../models/schedule/schedule.model')
 const dayConstants = require('../../constants/date')
 
+exports.createNewAppointment = async (req, res, next) => {
+    let {schedule, day} = req.body;
+    schedule = parseInt(schedule);
+    const {userId} = req.session;
+    const appointment = new Appointment(
+        null,
+        schedule,
+        userId
+    )
+    await appointment.save();
+    await Schedule.updateReduceTotal(schedule)
+
+    res.redirect(`/user/appointment`)
+}
+
 exports.getAppointmentDays = async (req, res, next) => {
     res.render('appointment/appointmentDays', {
         pageTitle: 'Citas',
@@ -52,6 +67,8 @@ exports.getUserAppointments = async (req, res, next) => {
     appointments = JSON.parse(appointments)
     const appointmentsTranslatedDay = appointments.map( app => {
         return {
+            id: app.id,
+            dayScheduleId : app.dayScheduleId,
             day: dayConstants.dayTranslation[app.day],
             hour: app.hour
         }
@@ -63,17 +80,11 @@ exports.getUserAppointments = async (req, res, next) => {
     })
 }
 
-exports.createNewAppointment = async (req, res, next) => {
-    let {schedule, day} = req.body;
-    schedule = parseInt(schedule);
-    const {userId} = req.session;
-    const appointment = new Appointment(
-        null,
-        schedule,
-        userId
-    )
-    await appointment.save();
-    await Schedule.update(schedule)
+exports.deleteAppointment = async (req, res, next) => {
+    const {id, dayScheduleId} = req.body
 
-    res.redirect(`/appointment?day=${day}`)
+    await Schedule.updateAddTotal(dayScheduleId)
+    await Appointment.delete(parseInt(id))
+
+    res.redirect('/user/appointment');
 }

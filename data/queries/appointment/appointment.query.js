@@ -35,6 +35,14 @@ exports.selectUserAppointments = () => {
     `
 }
 
+exports.delete = () => {
+    return `
+        DELETE
+        FROM Appointment
+        WHERE id = ?
+    `
+}
+
 exports.deleteAll = () => {
     return `
         DELETE
