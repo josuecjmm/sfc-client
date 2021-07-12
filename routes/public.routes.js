@@ -7,7 +7,6 @@ const isAuth = require('../middlewares/auth')
 
 // GET /error
 router.get('/home', isAuth, appointmentController.getAppointmentDays);
-router.get('/error', publicController.getError);
 
 module.exports = {
     routes: router,

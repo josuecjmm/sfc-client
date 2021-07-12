@@ -14,7 +14,7 @@ exports.select = () => {
 
 exports.selectSingle = () => {
     return `
-        SELECT id, total
+        SELECT id, hour, total
         FROM DaySchedule
         WHERE id = ?
     `

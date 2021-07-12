@@ -8,15 +8,43 @@ exports.createNewAppointment = async (req, res, next) => {
     let {schedule, day} = req.body;
     schedule = parseInt(schedule);
     const {userId} = req.session;
-    const appointment = new Appointment(
-        null,
-        schedule,
-        userId
-    )
-    await appointment.save();
-    await Schedule.updateReduceTotal(schedule)
 
-    res.redirect(`/user/appointment`)
+    let userAppointments = await Appointment.getUserAppointments(userId);
+    userAppointments = JSON.parse(userAppointments)
+    const selectedScheduleUserAppointments = userAppointments.filter(app => {
+            return app.day === day
+        }
+    )
+
+    let scheduleSelected = await Schedule.selectSingle(schedule)
+    scheduleSelected = JSON.parse(scheduleSelected)
+
+    if(selectedScheduleUserAppointments.length > 0) {
+        req.flash('error',
+            `El usuario ya tiene una cita el dia ${dayConstants.dayTranslation[day]}`)
+        res.redirect(`/appointment/new?day=${day}`)
+    } else {
+        const totalSpacesForSchedule = scheduleSelected[0].total;
+        if(totalSpacesForSchedule < 1) {
+            req.flash('error',
+                `Ya no hay espacios a las ${scheduleSelected[0].hour}`)
+            res.redirect(`/appointment/new?day=${day}`)
+        } else {
+            const appointment = new Appointment(
+                null,
+                schedule,
+                userId
+            )
+            await appointment.save();
+            await Schedule.updateReduceTotal(schedule)
+
+            res.redirect(`/user/appointment`)
+        }
+    }
+
+
+
+
 }
 
 exports.getAppointmentDays = async (req, res, next) => {
@@ -57,7 +85,8 @@ exports.getNewAppointment = async (req, res, next) => {
         translatedDay,
         day,
         users,
-        schedules
+        schedules,
+        errors: req.flash('error')
     })
 }
 
