@@ -19,6 +19,7 @@ exports.login = async (req, res, next) => {
         if (userPassword === password) {
             req.session.isLoggedIn = true;
             req.session.userId = users[0].id;
+            req.session.name = users[0].fullName;
             res.redirect('/home')
         } else {
             req.flash('error', 'Usuario o Contraseña invalido')

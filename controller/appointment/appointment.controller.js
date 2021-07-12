@@ -48,9 +48,11 @@ exports.createNewAppointment = async (req, res, next) => {
 }
 
 exports.getAppointmentDays = async (req, res, next) => {
+    const {name} = req.session;
     res.render('appointment/appointmentDays', {
         pageTitle: 'Citas',
-        html: html
+        html: html,
+        name
     })
 }
 

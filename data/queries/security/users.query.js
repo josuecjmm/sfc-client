@@ -15,7 +15,7 @@ exports.selectListEmail = () => {
 };
 
 exports.selectListPersonalIds = () => {
-    return `Select id, personalId, password from User
+    return `Select id, personalId, password, fullName from User
     WHERE personalId = ?`
 };
 
