@@ -1,4 +1,62 @@
 <%- include('./includes/head.ejs') %>
+<!-- Modal HTML embedded directly into document -->
+<!--Scripts to import jquery and bootstrap to manage the template-->
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/jquery.modal.min.js"></script>
+<!-- Login-->
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <div id="sticky" class="modal" style=
+            "display: inline-block;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            height: 80%;
+            width: 85%;
+">
+                <h4>Terminos y Condiciones</h4>
+                <br>
+                <p>Saravias FC le da la bienvenida a esta nueva modalidad de reserva para espacios de entrenamiento.</p>
+                <hr>
+                <p>Para ingresar únicamente necesita su número de cédula como usuario y contraseña.</p>
+                <hr>
+                <p>Con esta nueva app Saravias FC Le informa que podrá reservar su espacio con anticipación.</p>
+                <hr>
+                <p>Solicitamos compromiso para los días que reserve al entrenamiento .</p>
+                <hr>
+                <p>De ser que no puede asistir por asuntos personales o de último momento , favor ingresar a la app y
+                    cancelar el espacio , para que dé esta manera se libere el espacio , y alguna persona que lo desee
+                    lo
+                    pueda aprovechar.
+                </p>
+                <hr>
+                <p>En caso de cambios , puede volver a ingresar y gestionar el cambio o suspensión de la cita.</p>
+                <hr>
+                <p>La reservación de los campos se hará semanal.</p>
+                <hr>
+                <p>Cada semana los administradores informarán cuando está disponible el horario de la siguiente semana
+                    para
+                    posterior reservación.
+                </p>
+                <hr>
+                <p>Tiempo límite para cancelación de espacio reservado debe de ser mínimo con 3 horas de anticipación o
+                    máximo 24 horas.
+                </p>
+                <hr>
+                <p>Agradecemos su compromiso y fidelidad con Saravias FC</p>
+                <br>
+                <div class="d-flex justify-content-center">
+                    <button id="acceptTerms" class="btn btn-success" type="submit" onclick="acceptTerms()" rel="modal:close"/>Aceptar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Link to open the modal -->
 <div class="container h-100" style="background-color: #FB9300; color:white">
     <div class="row h-100 justify-content-center align-items-center">
         <div class="col-10 col-md-8 col-lg-6">
@@ -25,4 +83,20 @@
         </div>
     </div>
 </div>
-<%- include('includes/end.ejs')%>
+
+<script>
+    const termsStatus = window.localStorage.getItem('acceptedTerms');
+    if (!termsStatus) {
+        $('#sticky').show
+    } else {
+        $('#sticky').hide()
+    }
+
+    function acceptTerms() {
+        window.localStorage.setItem('acceptedTerms', true);
+        $('#sticky').hide()
+    }
+
+
+</script>
+<%- include('includes/end.ejs') %>
